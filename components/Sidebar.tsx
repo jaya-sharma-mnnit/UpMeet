@@ -19,14 +19,14 @@ const Sidebar = () => {
         {sidebarLinks.map((link)=>{
             //link is currently active;
             //starts with for routes like meeting/123
-            const isActive= pathname ===link.route || pathname.startsWith(link.route);
+            const isActive=pathname ===link.route;
 
             return (
                 
                 <Link
                 href={link.route}
                 key={link.label}
-                className={`flex gap-4 items-center p-4 rounded-lg justify-start ${isActive ? 'bg-blue' : ''}`}>
+                className={`flex gap-4 items-center p-4 rounded-lg justify-start ${isActive ? 'bg-[#0E78F9]' : ''}`}>
                   <Image 
                   src={link.imgUrl}
                   alt={link.label}

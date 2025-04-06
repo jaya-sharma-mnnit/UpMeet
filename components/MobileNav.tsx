@@ -2,9 +2,13 @@
 import React from 'react'
 import Image from 'next/image'
 import { useState ,useEffect,useRef} from 'react';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { sidebarLinks } from '@/constants';
 
 
 const MobileNav = () => {
+  const pathname=usePathname();
   const [isOpen,setIsOpen]=useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null)
 
@@ -49,29 +53,31 @@ const MobileNav = () => {
                       UpMeet
                     </p>
             </h2>
-            <ul className='space-y-4 pt-5'>
-              <li className=' flex gap-2 items-center  cursor-pointer px-2  h-10 text-white text-md hover:bg-[#0E78F9] rounded-md'>
-              <Image src="./icons/Home.svg" alt="" width={20} height={20}/>
-                <p className='font-semibold'>Home</p>
+            <div className="pt-3 flex flex-col gap-4">
+        {sidebarLinks.map((link)=>{
+            //link is currently active;
+           
+            const isActive= pathname ===link.route ;
+
+            return (
                 
-                  </li>
-              <li className='flex gap-2 items-center cursor-pointer px-2  h-10 text-white text-md hover:bg-[#0E78F9] rounded-md'>
-              <Image src="./icons/upcoming.svg" alt="" width={20} height={20}/>
-                <p className='font-semibold'>Upcoming
-                </p></li>
-              <li className='flex gap-2 items-center cursor-pointer px-2  h-10 text-white text-md hover:bg-[#0E78F9] rounded-md'>
-                <Image src="./icons/previous.svg" alt="" width={20} height={20}/>
-                <p className='font-semibold'>
-                  Previous
-                </p>
-              </li>
-              <li className='flex gap-2 items-center cursor-pointer px-2 h-10 text-white text-md hover:bg-[#0E78F9] rounded-md'>
-              <Image src="./icons/Video.svg" alt="" width={20} height={20}/>
-                <p className='font-semibold'>
-                  Recordings
-                </p>
-              </li>
-            </ul>
+                <Link 
+                onClick={() => setIsOpen(false)}
+                href={link.route}
+                key={link.label}
+                className={`flex gap-4 items-center p-4 rounded-lg justify-start ${isActive ? 'bg-[#0E78F9]' : ''}`}>
+                  <Image 
+                  src={link.imgUrl}
+                  alt={link.label}
+                  width={20}
+                  height={20}
+
+                  />
+                  <p className="text-lg font-semibold ">{link.label}</p>
+                </Link>
+            )
+        })}
+      </div>
           </div>
         </div>
       )}
