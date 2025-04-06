@@ -12,7 +12,7 @@ const Navbar = () => {
         UpMeet
       </p>
      </Link>
-     <div className='flex flex-between gap-5 hidden  '>
+     <div className='flex justify-between gap-5 sm:hidden  '>
       {/*user management*/}
       <MobileNav/>
      </div>
