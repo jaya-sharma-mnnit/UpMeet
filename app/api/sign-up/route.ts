@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/app/helper/dbConnect";
 import User from "@/models/User";
+import jwt from "jsonwebtoken";
 
 export async function POST(req: Request) {
   await dbConnect();
@@ -37,12 +38,34 @@ export async function POST(req: Request) {
       password: hashedPassword,
     });
 
-    return NextResponse.json(
-      { message: "✅ User registered successfully", user: newUser },
-      { status: 201 }
+    const token = jwt.sign(
+      { id: newUser._id, email: newUser.email },
+      process.env.JWT_SECRET!,
+      { expiresIn: "7d" }
     );
+
+    const response = NextResponse.json({
+      message: "User registered successfully",
+      user: {
+        _id: newUser._id,
+        username: newUser.username,
+        email: newUser.email
+      },
+    });
+
+    // Set token as HTTP-only cookie
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    return response;
+
   } catch (error) {
-    console.error("❌ Sign-in error:", error);
+    console.error("❌ Sign-up error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

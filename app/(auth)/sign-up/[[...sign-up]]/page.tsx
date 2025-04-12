@@ -2,16 +2,20 @@
 import React from 'react'
 import Image from 'next/image'
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
+  const router=useRouter();
     const[username,setUsername]=useState('');
     const[password,setPassword]=useState('');
     const[email,setEmail]=useState('');
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
       event.preventDefault(); 
 
   try {
+    setLoading(true);
     const response = await fetch("/api/sign-up", {
       method: "POST",
       headers: {
@@ -32,10 +36,14 @@ const SignUp = () => {
       setUsername("");
       setEmail("");
       setPassword("");
+      setLoading(false);
+      router.push("/");
     } else {
+      setLoading(false);
       console.warn("⚠️ Server responded with an error:", data.message );
     }
   } catch (error) {
+    setLoading(false);
     console.error("❌ Request failed:", error);
   }
     }
@@ -83,9 +91,12 @@ const SignUp = () => {
 
       <button
         type="submit"
-        className="w-full py-2 mt-2 h-10 rounded-lg bg-[#0E78F9] hover:bg-blue-700 transition-colors duration-200 text-white text-sm font-semibold"
+        disabled={loading}
+        className= {`w-full py-2 mt-2 h-10 rounded-lg ${
+          loading ? "bg-blue-300" : "bg-[#0E78F9]  hover:bg-blue-700"}
+         transition-colors duration-200 text-white text-sm font-semibold`}
       >
-        Continue →
+        {loading ? "Signing you up..." : "Continue →"}
       </button>
     </form>
 
