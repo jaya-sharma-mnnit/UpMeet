@@ -1,7 +1,22 @@
 import MeetingTypeList from '@/components/MeetingTypeList';
-import React from 'react'
+import React from 'react';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import  jwt  from 'jsonwebtoken';
 
-const Home = () => {
+const Home = async() => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token'); // or whatever key you use
+
+  if (!token) {
+    redirect('/sign-in');
+  }
+  try {
+    const user = jwt.verify(token.value, process.env.JWT_SECRET!);
+    // Render home page using `user` data
+  } catch {
+    redirect('/sign-in');
+  }
   const now =new Date();
   const year = now.getFullYear();
   const month = now.toLocaleDateString('en-US', { month: 'long' });
