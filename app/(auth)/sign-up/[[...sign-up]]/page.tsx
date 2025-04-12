@@ -14,8 +14,18 @@ const SignUp = () => {
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
       event.preventDefault(); 
 
+      setLoading(true);
+
+  
+    
+      if (!email || !password || !username) {
+        console.warn("Please fill in all the fields");
+        setLoading(false);
+        return;
+      }
+
   try {
-    setLoading(true);
+    
     const response = await fetch("/api/sign-up", {
       method: "POST",
       headers: {
