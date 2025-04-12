@@ -13,8 +13,27 @@ export default {
           1:"#1C1F2E",
           2:"#161925"
         },
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        blue: {
+          1: '#0E78F9',
+        },
+        sky: {
+          1: '#C9DDFF',
+          2: '#ECF0FF',
+          3: '#F5FCFF',
+        },
+        orange:{
+          1:'#FF724E'
+        },
+        purple: {
+          1: '#830EF9',
+        },
+        yellow: {
+          1: '#F9A90E',
+        },
+       
+      },
+      backgroundImage: {
+        hero: "url('/images/hero-background.png')"
       },
     },
   },
