@@ -21,7 +21,7 @@ const SignIn = () => {
     
       if (!email || !password) {
         console.warn("Please fill in both fields");
-
+        setLoading(false);
         return;
       }
       try {
