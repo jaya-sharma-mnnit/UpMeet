@@ -3,12 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import dbConnect from '@/app/helper/dbConnect';
 import User from '@/models/User';
+import { cookies } from 'next/headers';
 
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-
-    const token = req.cookies.get('token')?.value;
+    const cookie=await cookies();
+    const token = cookie.get('token')?.value;
 
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
