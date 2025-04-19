@@ -1,9 +1,10 @@
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
 import { ReactNode} from 'react'
-
+import StreamVideoProvider from '@/providers/StreamClientProvider'
 const HomeLayout = ({children}:{children:ReactNode}) => {
   return (
+    <StreamVideoProvider>
     <main className='relative'>
     <Navbar/>
     <div className='flex'>
@@ -16,6 +17,7 @@ const HomeLayout = ({children}:{children:ReactNode}) => {
     </div>
     <footer>Footer</footer>    
     </main>
+    </StreamVideoProvider>
   )
 }
 
