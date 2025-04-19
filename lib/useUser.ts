@@ -8,7 +8,7 @@ export function useUser() {
     async function fetchUser() {
       try {
         const res = await fetch('/api/me');
-        if (!res.ok) throw new Error('User not authenticated');
+        if (!res.ok) setUser(null);
 
         const data = await res.json();
         setUser(data.user); // Set the user data

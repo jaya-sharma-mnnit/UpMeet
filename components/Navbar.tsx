@@ -13,7 +13,7 @@ const Navbar = () => {
    useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/verify'); 
+        const res = await fetch('/api/me'); 
         
         if (res.ok) {
           setIsLoggedIn(true);
