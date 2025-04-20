@@ -12,7 +12,7 @@ const Meeting = () => {
   const { id } = useParams(); 
   if(!id) throw new Error('client failed') ;
   const {user,isLoaded}=useUser()
-  const[isSetupComplete,setisSetupComplete]= useState(false);
+  const[isSetupComplete,setIsSetupComplete]= useState(false);
   const{Call,isCallLoading}=useGetCallById(id);
 
   if(!isLoaded||isCallLoading) return <Loader/>
@@ -22,7 +22,7 @@ const Meeting = () => {
         <StreamTheme>
           {
             !isSetupComplete?(
-              <MeetingSetup/>
+              <MeetingSetup setIsSetupComplete={setIsSetupComplete}/>
             ):(
               <MeetingRoom/>
             )
