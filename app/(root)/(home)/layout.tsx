@@ -3,13 +3,13 @@ import Sidebar from '@/components/Sidebar'
 import { ReactNode} from 'react'
 import { Metadata } from 'next';
 
-export const metadata :Metadata= {
-  title: "YOOM",
-  description: "A video-calling website built with Next.js",
+export const metadata: Metadata = {
+  title: "Upmeet",
+  description: "A video calling app",
   icons:{
     icon:'/icons/logo.svg'
-  }
-}; 
+  },
+};
 
 const HomeLayout = ({children}:{children:ReactNode}) => {
   return (

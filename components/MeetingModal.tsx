@@ -29,12 +29,12 @@ const MeetingModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-55">
        
       <div
-        className={`relative  flex flex-col gap-6 border-none bg-black rounded-2xl p-6 w-full max-w-[520px]  ${className} text-white`}
+        className={`relative  flex flex-col gap-6 border-none bg-dark-1 rounded-2xl p-6 w-full max-w-[520px]  ${className} text-white`}
       >
         <div className="flex flex-col gap-6">
         <button
               onClick={onClose}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+              className="absolute top-2 right-2 mr-4 text-gray-500 hover:text-gray-700 text-xl"
             >
               &times;
             </button>
@@ -49,12 +49,13 @@ const MeetingModal = ({
           >
             {title}
           </h1>
+          
         </div>
-
-        <button className="bg-blue-1 focus-visible:ring-0 focus-visible:ring-offset-0 p-2 rounded-sm"
+        {children}
+        <button className="flex items-center justify-center gap-2 bg-blue-1 focus-visible:ring-0 focus-visible:ring-offset-0 p-2 rounded-md"
         onClick={handleClick}>
-            {buttonIcon&&(<Image src={buttonIcon} alt='button icon' width={13} height={13}/>)}
-            {buttonText||'Schedule Meeting'}
+            {buttonIcon&&(<Image className="" src={buttonIcon} alt='button icon' width={15} height={15}/>)}
+           <p> {buttonText||'Schedule Meeting'}</p>
         </button>
       </div>
     </div>
