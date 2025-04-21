@@ -1,5 +1,6 @@
 'use client'
 import {
+ 
   CallControls,
   CallParticipantsList,
   CallStatsButton,
@@ -11,16 +12,17 @@ import {
 import React,{useState} from 'react';
 import LayoutDropDown from './LayoutDropDown';
 import { Users } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import EndCallButton from './EndCallButton';
 import Loader from './Loader';
 
 type CallLayoutType='grid'|'speaker-left' |'speaker-right';
 
 const MeetingRoom = () => {
+ 
   const [layout,setLayout]= useState<CallLayoutType>('speaker-left');
   const [showParticipants , setShowParticipants] = useState(false);
- 
+ const router=useRouter();
   const searchParams = useSearchParams();
   const isPersonalRoom = !!searchParams.get('personal');
 
@@ -34,12 +36,7 @@ const MeetingRoom = () => {
         return <SpeakerLayout participantsBarPosition="right"/>
     }
   }
-  const handleSelect = (option: string) => {
-    if (option === 'grid') setLayout('grid');
-    else if (option === 'left') setLayout('speaker-left');
-    else if (option === 'right') setLayout('speaker-right');
-    
-  };
+
   
   const { useCallCallingState } = useCallStateHooks();
 
@@ -61,7 +58,8 @@ const MeetingRoom = () => {
         </div>
       </div>
       <div className='fixed bottom-0 flex w-full items-center justify-center gap-3 flex-wrap pt-2'>
-        <CallControls/>
+        <CallControls onLeave={() =>  router.push('/')}
+  />
 
         <LayoutDropDown onSelect={setLayout} />
 

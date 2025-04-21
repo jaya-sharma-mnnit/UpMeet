@@ -8,10 +8,16 @@ export function useUser() {
     async function fetchUser() {
       try {
         const res = await fetch('/api/me');
-        if (!res.ok) setUser(null);
+        if (!res.ok) {
+          setUser(null);
+          
+          return;
+        }
+
 
         const data = await res.json();
-        setUser(data.user); // Set the user data
+        setUser(data.user);
+        
       } catch (err) {
         console.error("Failed to fetch user:", err);
         setUser(null); // Ensure user is set to null if fetch fails
@@ -19,8 +25,9 @@ export function useUser() {
         setIsLoaded(true); // Set isLoaded to true once the fetch is complete
       }
     }
-
+    
     fetchUser();
+    
   }, []);
 
   return { user, isLoaded };
