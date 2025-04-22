@@ -13,12 +13,14 @@ const Meeting = () => {
   if(!id) throw new Error('client failed') ;
   const {user,isLoaded}=useUser()
   const[isSetupComplete,setIsSetupComplete]= useState(false);
-  const{Call,isCallLoading}=useGetCallById(id);
-
-  if(!isLoaded||isCallLoading) return <Loader/>
+  const{call,isCallLoading}=useGetCallById(id);
+  if(!call){
+    console.log("no call")
+  }
+  if(!isLoaded||isCallLoading||!call) return <Loader/>
   return (
     <main className='h-scree w-full'>
-      <StreamCall call={Call}>
+      <StreamCall call={call}>
         <StreamTheme>
           {
             !isSetupComplete?(

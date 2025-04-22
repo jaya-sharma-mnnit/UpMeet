@@ -166,10 +166,26 @@ const MeetingTypeList = () => {
       isOpen={MeetingState==='isInstantMeeting'}
       onClose={()=>setMeetingState(undefined)}
       title="Start an Instant Meeting"
-      className="text-centre"
+      className="text-center"
       handleClick={createMeeting}
       buttonText="Start Meeting"
       />
+      <MeetingModal
+      isOpen={MeetingState==='isJoiningMeeting'}
+      onClose={()=>setMeetingState(undefined)}
+      title="Type the link here"
+      className="text-center"
+      handleClick={()=>{
+        console.log("button clicked");
+        console.log(values.link)
+        router.push(values.link)}}
+      buttonText="Join Meeting"
+      >
+       <input placeholder="meeting link" 
+       className="bg-dark-3 border-none focus-visible: ring-0
+       focus-visible:ring-offset-0"
+       onChange={(e)=>setValues({...values,link:e.target.value})}/> 
+      </MeetingModal>
     </section>
   );
 };

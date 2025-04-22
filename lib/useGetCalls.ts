@@ -7,7 +7,7 @@ export const useGetCalls = () => {
   const client = useStreamVideoClient();
   const [calls, setCalls] = useState<Call[]>();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [recordingCalls, setRecordingCalls] = useState<Call[]>([]);
   useEffect(() => {
     const loadCalls = async () => {
       if (!client || !user?._id ) {
@@ -33,6 +33,7 @@ export const useGetCalls = () => {
         
 
         setCalls(calls);
+        
       } catch (error) {
         console.error(error);
       } finally {
