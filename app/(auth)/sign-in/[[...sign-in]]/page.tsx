@@ -11,7 +11,8 @@ const SignIn = () => {
   const[password,setPassword]=useState('');
     const[email,setEmail]=useState('');
     const [loading, setLoading] = useState(false);
-    
+    const [emailError, setEmailError]=useState('');
+    const [passwordError, setPasswordError]=useState('');
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
       event.preventDefault();
@@ -20,10 +21,12 @@ const SignIn = () => {
   
     
       if (!email || !password) {
-        console.warn("Please fill in both fields");
+        if(!email)setEmailError('Please enter your email address');
+        if(!password)setPasswordError('Please enter your password');
         setLoading(false);
         return;
       }
+
       try {
         const response = await fetch("/api/sign-in", {
           method: "POST",
@@ -40,15 +43,18 @@ const SignIn = () => {
           
           setEmail("");
           setPassword("");
-          setLoading(false);
+          
           router.push("/");
           
         } else {
-          setLoading(false);
+          setPasswordError(data.message);
           console.warn("⚠️ Sign-in failed:", data.message || "Something went wrong");
         }
       } catch (error) {
+        setPasswordError('Network error during sign-in');
         console.error("❌ Network error during sign-in:", error);
+        
+      }finally{
         setLoading(false);
       }
       
@@ -62,28 +68,33 @@ const SignIn = () => {
                   <p className="text-sm text-gray-400">Welcome back!</p>
               </div>
               
-      <form className="mt-6 px-4 space-y-8 " onSubmit={handleSubmit} >
+      <form className="mt-6 px-4 space-y-4 " onSubmit={handleSubmit} >
       <input
         type="email"
         value={email}
         placeholder="email address"
         onChange={(e)=>{
-            
+            if(emailError)setEmailError('');
             setEmail(e.target.value)
         }}
         className="w-full px-4 py-2  h-10 rounded-lg bg-dark-1 text-white text-sm placeholder-gray-400 outline-1 "
       />
-      
+      <div className="text-red-500 text-xs  ">
+      {emailError }
+    </div>
       <input
         type="password"
         placeholder="password"
         value={password}
         onChange={(e)=>{
-           setPassword(e.target.value)
+           setPassword(e.target.value);
+           if(passwordError)setPasswordError('');
         }}
-        className="w-full px-4 py-2 h-10 rounded-lg  bg-dark-1 text-white text-sm placeholder-gray-400 outline-1 "
+        className="w-full px-4 py-2 h-10 rounded-lg mb-0 bg-dark-1 text-white text-sm placeholder-gray-400 outline-1 "
       />
-      
+       <div className="text-red-500 text-xs  ">
+      {passwordError }
+    </div>
       <button
         type="submit"
         disabled={loading}

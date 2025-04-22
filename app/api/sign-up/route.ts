@@ -14,16 +14,41 @@ export async function POST(req: Request) {
     // Simple validation
     if (!email || !username || !password) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { message: "Missing required fields" },
         { status: 400 }
       );
+    }
+         // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.log("invalid email format");
+      return NextResponse.json(
+        { message: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    // Password format validation
+    // Must be at least 8 characters, include 1 number, 1 uppercase letter, and 1 special character
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()\-_=+{}[\]|\\:;"'<>,./?])[A-Za-z\d@$!%*?&#^()\-_=+{}[\]|\\:;"'<>,./?]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      // console.log("Password must be at least 8 characters long and include an uppercase letter, a number, and a special character");
+      return NextResponse.json(
+        {
+          message:
+            "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character"
+        },
+        { status: 400 }
+      );
+      
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
-        { message: "⚠️ User already exists" },
+        { message: "User already exists" },
         { status: 409 }
       );
     }
@@ -66,6 +91,6 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error("❌ Sign-up error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }

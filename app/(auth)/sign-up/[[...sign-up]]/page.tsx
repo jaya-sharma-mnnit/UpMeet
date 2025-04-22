@@ -6,10 +6,13 @@ import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
   const router=useRouter();
-    const[username,setUsername]=useState('');
-    const[password,setPassword]=useState('');
-    const[email,setEmail]=useState('');
+    const [username,setUsername]=useState('');
+    const [password,setPassword]=useState('');
+    const [email,setEmail]=useState('');
     const [loading, setLoading] = useState(false);
+    const [usernameError, setUsernameError]=useState('');
+    const [emailError, setEmailError]=useState('');
+    const [passwordError, setPasswordError]=useState('');
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
       event.preventDefault(); 
@@ -19,7 +22,10 @@ const SignUp = () => {
   
     
       if (!email || !password || !username) {
-        console.warn("Please fill in all the fields");
+        if(!username)setUsernameError('Please enter your username');
+        if(!email)setEmailError('Please enter your email address');
+        if(!password)setPasswordError('Please enter your password');
+       
         setLoading(false);
         return;
       }
@@ -49,11 +55,17 @@ const SignUp = () => {
       setLoading(false);
       router.push("/");
     } else {
+      if(data.message=="Invalid email format")setEmailError(data.message);
+        if(data.message=="Password must be at least 8 characters long and include an uppercase letter, a number, and a special character")
+          setPasswordError(data.message);
+          if(data.message=="User already exists")setEmailError(data.message);
+           
       setLoading(false);
       console.warn("⚠️ Server responded with an error:", data.message );
     }
   } catch (error) {
     setLoading(false);
+    setPasswordError('Request Failed');
     console.error("❌ Request failed:", error);
   }
     }
@@ -69,36 +81,46 @@ const SignUp = () => {
             <p className="text-sm text-gray-400">Create your account</p>
         </div>
 
-        <form className="mt-6 px-4 space-y-8" onSubmit={handleSubmit}>
+        <form className="mt-6 px-4 space-y-4" onSubmit={handleSubmit}>
       <input
         type="text"
         value={username}
         placeholder="username"
         onChange={(e)=>{
-            
+            if(usernameError)setUsernameError('');
             setUsername(e.target.value)
         }}
         className="w-full px-4 py-2  h-10 rounded-lg bg-dark-1 text-white text-sm placeholder-gray-400 outline-1 "
       />
+      <div className="text-red-500 text-xs  ">
+      {usernameError}
+    </div>
       <input
         type="email"
         placeholder="email address"
         value={email}
         onChange={(e)=>{
+          if(emailError)setEmailError('');
            setEmail(e.target.value)
         }}
         className="w-full px-4 py-2 h-10 rounded-lg  bg-dark-1 text-white text-sm placeholder-gray-400 outline-1 "
       />
+      <div className="text-red-500 text-xs  ">
+      {emailError }
+    </div>
       <input
         type="password"
         value={password}
         placeholder="password"
         onChange={(e)=>{
+          if(passwordError)setPasswordError('');
             setPassword(e.target.value)
         }}
         className="w-full px-4 py-2 h-10 rounded-lg  bg-dark-1 text-white text-sm placeholder-gray-400 outline-1 "
       />
-
+    <div className="text-red-500 text-xs  ">
+      {passwordError }
+    </div>
       <button
         type="submit"
         disabled={loading}
