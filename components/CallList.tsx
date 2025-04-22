@@ -5,20 +5,22 @@ import { Call, CallRecording } from '@stream-io/video-react-sdk';
 import Loader from './Loader';
 import { useGetCalls } from '@/lib/useGetCalls';
 import MeetingCard from './MeetingCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/providers/toastProvider';
 
 const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const router = useRouter();
   const { endedCalls, upcomingCalls, callRecordings, isLoading } =useGetCalls();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
-
+ // const toast=useToast();
   const getCalls = () => {
     
     switch (type) {
       case 'ended':
         return endedCalls;
       case 'recordings':
+        //console.log(recordings);
         return recordings;
       case 'upcoming':
         
@@ -41,14 +43,43 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
     }
   };
 
-
-
+  useEffect(() => {
+    const fetchRecordings = async () => {
+      if (!callRecordings || callRecordings.length === 0) {
+        console.log('No call recordings available.');
+        return;
+      }
+  
+      try {
+        const callData = await Promise.all(
+          callRecordings.map((call) => call.queryRecordings())
+        );
+  
+        const allRecordings = callData
+          .map(data => data.recordings)
+          .flat();
+  
+        console.log('All fetched recordings:', allRecordings);
+  
+        setRecordings(allRecordings);
+      } catch (error) {
+        console.error("Error fetching recordings:", error);
+        
+      }
+    };
+  
+    if (type === 'recordings') {
+      fetchRecordings();
+    }
+  }, [type, callRecordings]);
+  
   if (isLoading) return <Loader />;
 
   const calls = getCalls();
   
   const noCallsMessage = getNoCallsMessage();
- 
+
+  
 
   return (
     <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
@@ -64,7 +95,7 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
                   : '/icons/recordings.svg'
             }
             title={
-              (meeting as Call).state?.custom?.description.substring(0,30) ||
+              (meeting as Call).state?.custom?.description?.substring(0,30)  ||
               
               'No Description'
             }
